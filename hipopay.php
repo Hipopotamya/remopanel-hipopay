@@ -5,7 +5,7 @@ class HipopayIntegration
 {
     protected string $apiKey;
     protected string $apiSecret;
-    protected string $apiUrl = 'https://www.hipopotamya.test/api/v1/merchants';
+    protected string $apiUrl = 'https://www.hipopotamya.com/api/v1/merchants';
     protected int $userId;
     protected string $userEmail;
     protected string $username;

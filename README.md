@@ -9,7 +9,7 @@ CREATE TABLE `hipopay_transactions` (
     `user_id` int(11) NOT NULL,
     `username` varchar(255) NOT NULL,
     `amount` decimal(10,2) NOT NULL,
-    `commission_type` tinyint(1) NOT NULL COMMENT '1: TL, 2: Silk',
+    `commission_type` tinyint(1) NOT NULL,
     `status` varchar(50) NOT NULL,
     `response_data` text DEFAULT NULL,
     `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,

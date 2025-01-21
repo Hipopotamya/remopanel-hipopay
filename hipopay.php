@@ -3,14 +3,14 @@
 
 class HipopayIntegration
 {
-    protected string $apiKey;
-    protected string $apiSecret;
-    protected string $apiUrl = 'https://www.hipopotamya.com/api/v1/merchants';
-    protected int $userId;
-    protected string $userEmail;
-    protected string $username;
-    protected array $commissionTypes = [1, 2, 3];
-    protected array $product = [];
+    protected $apiKey;
+    protected $apiSecret;
+    protected $apiUrl = 'https://www.hipopotamya.com/api/v1/merchants';
+    protected $userId;
+    protected $userEmail;
+    protected $username;
+    protected $commissionTypes = [1, 2, 3];
+    protected $product = [];
 
     public function setApiKey(string $apiKey): void
     {

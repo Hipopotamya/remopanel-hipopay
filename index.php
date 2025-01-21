@@ -6,6 +6,7 @@ require_once('hipopay.php');
 
 if (! $User->JID > 0) {
     echo "Bu alanı sadece giriş yapmış kullanıcılarımız görebilir.";
+    exit;
 } else {
     date_default_timezone_set('Europe/Istanbul');
     
@@ -32,12 +33,18 @@ if (! $User->JID > 0) {
 
     try {
         $response = $hipopay->createStoreSession();
-        
-        if (isset($response['success']) && $response['success'] === true) {
-            header('Location: ' . $response['data']['payment_url'] ?? '');
+
+        if (isset($response['success']) && $response['success']===true) {
+            if (isset($response['data']['payment_url'])) {
+                header('Location: '.$response['data']['payment_url']);
+            } else {
+                echo 'Hata: Ödeme URL\'si bulunamadı.';
+            }
         } else {
-            echo 'Hata: ' . ($response['message'] ?? 'Bir hata oluştu');
+            echo 'Hata: '.(isset($response['message']) ? $response['message'] : 'Bir hata oluştu');
         }
+
+       
     } catch (Exception $e) {
         echo 'Hata: ' . $e->getMessage();
     }

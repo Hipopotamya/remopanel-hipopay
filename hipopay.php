@@ -12,32 +12,32 @@ class HipopayIntegration
     protected $commissionTypes = [1, 2, 3];
     protected $product = [];
 
-    public function setApiKey(string $apiKey)
+    public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
     }
 
-    public function setApiSecret(string $apiSecret)
+    public function setApiSecret($apiSecret)
     {
         $this->apiSecret = $apiSecret;
     }
 
-    public function setUserId(int $userId)
+    public function setUserId($userId)
     {
         $this->userId = $userId;
     }
 
-    public function setUserEmail(string $userEmail)
+    public function setUserEmail($userEmail)
     {
         $this->userEmail = $userEmail;
     }
 
-    public function setUsername(string $username)
+    public function setUsername($username)
     {
         $this->username = $username;
     }
 
-    public function setProduct(array $product)
+    public function setProduct($product)
     {
         $this->product = $product;
     }
@@ -57,6 +57,7 @@ class HipopayIntegration
             )
         ];
 
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->apiUrl.'/store/token');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -64,11 +65,13 @@ class HipopayIntegration
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Accept: application/json'
         ]);
 
-        $result = @curl_exec($ch);
+        $result = curl_exec($ch);
 
         curl_close($ch);
 
@@ -80,7 +83,7 @@ class HipopayIntegration
      */
     public function createPaymentSession()
     {
-          if (isset($this->product['commission_type']) && !in_array($this->product['commission_type'], $this->commissionTypes)) {
+        if (isset($this->product['commission_type']) && !in_array($this->product['commission_type'], $this->commissionTypes)) {
             throw new Exception('Invalid commission type');
         }
 
@@ -121,11 +124,14 @@ class HipopayIntegration
 
     public function getIpnStatusIsSuccess()
     {
+        $jsonData = file_get_contents('php://input');
+        $data = json_decode($jsonData, true);
+
         $hash = base64_encode(
-            hash_hmac('sha256',$_POST["transaction_id"].$_POST["user_id"].$_POST["email"].$_POST["name"].$_POST["status"].$this->apiKey,$this->apiSecret ,true)
+            hash_hmac('sha256',$data["transaction_id"].$data["user_id"].$data["email"].$data["name"].$data["status"].$this->apiKey,$this->apiSecret ,true)
         );
 
-        return $hash === $_POST["hash"];
+        return $hash === $data["hash"];
     }
 
     public function getClientIpAddress()

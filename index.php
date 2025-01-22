@@ -9,7 +9,7 @@ if (! $User->JID > 0) {
     exit;
 } else {
     date_default_timezone_set('Europe/Istanbul');
-    
+
     $hipopaySettings = $panelDb->table('api_hipopay_settings')
         ->where('is_active', 1)
         ->orderBy('id', 'desc')
@@ -24,7 +24,7 @@ if (! $User->JID > 0) {
     $userEmail = $User->Email;
 
     $hipopay = new HipopayIntegration();
-    
+
     $hipopay->setApiKey($hipopaySettings->api_key);
     $hipopay->setApiSecret($hipopaySettings->api_secret);
     $hipopay->setUserId($userID);
@@ -44,7 +44,7 @@ if (! $User->JID > 0) {
             echo 'Hata: '.(isset($response['message']) ? $response['message'] : 'Bir hata oluştu');
         }
 
-       
+
     } catch (Exception $e) {
         echo 'Hata: ' . $e->getMessage();
     }

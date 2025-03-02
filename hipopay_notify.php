@@ -23,7 +23,7 @@ if ($data) {
     if ($hipopay->getIpnStatusIsSuccess()) {
         $userId = $data['user_id'];
         $username = $data['name'];
-        $amount = $data['product']['sku'];
+        $amount = $data['product']['sku'] * $data['product']['qty'];
         $transactionId = $data['transaction_id'];
 
         $user = $accountDb->table('TB_User')
